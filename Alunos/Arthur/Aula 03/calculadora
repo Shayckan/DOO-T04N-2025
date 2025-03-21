@@ -1,0 +1,102 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+
+class Venda {
+    int quantidade;
+    double valorVenda;
+    double desconto;
+
+    public Venda(int quantidade, double valorVenda, double desconto) {
+        this.quantidade = quantidade;
+        this.valorVenda = valorVenda;
+        this.desconto = desconto;
+    }
+
+    @Override
+    public String toString() {
+        return "Quantidade: " + quantidade + ", Valor Total: R$ " + valorVenda + ", Desconto: R$ " + desconto;
+    }
+}
+
+public class Main {
+
+    static ArrayList<Venda> vendas = new ArrayList<>();
+    
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+        int opcao = 0;
+
+        while (opcao != 4) {
+
+            System.out.println("==========MENU=========");
+            System.out.println("1. Calcular preço total");
+            System.out.println("2. Calcular troco");
+            System.out.println("3. Registrar vendas");
+            System.out.println("4. Sair");
+            opcao = scanner.nextInt();
+
+            switch (opcao) {
+
+                case 1:
+                    System.out.println("Digite a quantidade de plantas: ");
+                    int quantidade = scanner.nextInt();
+                    System.out.print("Digite o preço unitário da planta: ");
+                    double precoUnitario = scanner.nextDouble();
+                    double precoTotal = calcularPrecoTotal(quantidade, precoUnitario);
+                    System.out.println("O preço total da compra ficou em: R$ " + precoTotal);
+                    break;
+
+                case 2:
+                    System.out.print("Digite o valor recebido: R$ ");
+                    double valorCliente = scanner.nextDouble();
+                    System.out.print("Digite o valor da compra: R$ ");
+                    double valorTotal = scanner.nextDouble();
+                    double troco = calcularTroco(valorCliente, valorTotal);
+                    if (troco < 0) {
+                        System.out.println("O valor recebido não é suficiente para realizar a compra");
+                    } else {
+                        System.out.println("O troco do cliente é: R$ " + troco);
+                    }
+                    break;
+
+                case 3:
+                    System.out.println("Digite a quantidade de plantas: ");
+                    int quantidadeVenda = scanner.nextInt();
+                    System.out.print("Digite o preço unitário da planta: ");
+                    double precoUnitarioVenda = scanner.nextDouble();
+
+                    double valorVenda = calcularPrecoTotal(quantidadeVenda, precoUnitarioVenda);
+                    double desconto = 0.0;
+
+                    if (quantidadeVenda > 10) {
+                        desconto = valorVenda * 0.05;
+                        valorVenda -= desconto;
+                    }
+
+                    Venda novaVenda = new Venda(quantidadeVenda, valorVenda, desconto);
+                    vendas.add(novaVenda);
+                    System.out.println("Venda registrada com sucesso!");
+                    System.out.println(novaVenda);
+                    break;
+
+                case 4:
+                    System.out.println("Fechando...");
+                    break;
+
+                default:
+                    System.out.println("Opção inválida!");
+                    break;
+            }
+        }
+        scanner.close();
+    }
+
+    public static double calcularPrecoTotal(int quantidade, double precoUnitario) {
+        return quantidade * precoUnitario;
+    }
+
+    public static double calcularTroco(double valorRecebido, double valorCompra) {
+        return valorRecebido - valorCompra;
+    }
+}
